@@ -16,9 +16,12 @@ float numeralRadius;
 float secondaryNumeralRadius;
 PFont font;
 
+int hoursOnClock = 4;
+int hoursInDay = 2 * hoursOnClock;
+
 int fps = 30;
 int drawSeconds = 0;
-int secsIncrement = 10;
+int secsIncrement = 30;
 
 int ss = 0;
 int mm = 0;
@@ -51,7 +54,7 @@ void updateDemoClock() {
   if (ss == 0) {
     mm = (mm + 1) % 60;
     if (mm == 0) {
-      hh = (hh + 1) % 24;
+      hh = (hh + 1) % hoursInDay;
       //if (hh == 0) {
       //  hh = 1;
       //}
@@ -68,15 +71,17 @@ void draw() {
   //float hh = hour();
   
 
-  float totalMinutes = hh * 60.0 + mm + ss / 60.0;
+  //float totalMinutes = hh * 60.0 + mm + ss / 60.0;
   
-  float percentageThroughDay = hh / 24.0  +  mm / (60.0 * 24.0)  +  ss / (60.0 * 60.0 * 24.0);
+ 
+  float percentageThroughDay = hh / float(hoursInDay)  +  mm / (60.0 * float(hoursInDay))  +  ss / (60.0 * 60.0 * float(hoursInDay));
   
+  //println("PC: " + percentageThroughDay);
   // Angles for sin() and cos() start at 3 o'clock;
   // subtract HALF_PI to make them start at the top
-  float s = map(ss, 0, 60, 0, TWO_PI) - HALF_PI;
-  float m = map(mm + norm(ss, 0, 60), 0, 60, 0, TWO_PI) - HALF_PI; 
-  float h = map(hh + norm(mm, 0, 60), 0, 24, 0, TWO_PI * 2) - HALF_PI;
+  float s = map(float(ss), 0, 60.0, 0.0, TWO_PI) - HALF_PI;
+  float m = TWO_PI * (float(mm) + float(ss) / 60.0) / 60.0 - HALF_PI;
+  float h = TWO_PI * (float(hh) + float(mm) / 60.0 + float(ss)/ 3600.0) / float(hoursOnClock) - HALF_PI;
 
   // digital time
   textAlign(LEFT);
@@ -93,10 +98,12 @@ void draw() {
 
   push();
 
-  //float amountRot = 2 * -360.0 * 5.5 * percentageThroughDay;
+  //float amountRot = -totalMinutes * 13.0 / 4.0;
 
-  float amountRot = -totalMinutes * 13.0 / 4.0;
-
+  float totalTurnsNeeded = (hoursOnClock + 1);
+  
+  float amountRot = -totalTurnsNeeded * 360.0 * percentageThroughDay;
+  
   //print("Degrees amount is " + amountRot);
   
   // note the half_pi, due to 0 degrees being 3pm, not midday
@@ -127,54 +134,52 @@ void draw() {
   for (int a = 0; a < 360; a+=6) {
     beginShape();
     float angle = radians(a);
-    float x = cos(angle) * secondsRadius;
-    float y = sin(angle) * secondsRadius;
+    float x = sin(angle) * secondsRadius;
+    float y = -cos(angle) * secondsRadius;
     vertex(x, y);
-    if (a % 30 == 0) {
-      float x2 = cos(angle) * secondsRadiusB;
-      float y2 = sin(angle) * secondsRadiusB;
+    if (a % (360 / hoursOnClock) == 0) {
+      float x2 = sin(angle) * secondsRadiusB;
+      float y2 = -cos(angle) * secondsRadiusB;
       vertex(x2, y2);
     }
     endShape();
   }
 
-  // draw 12 hour numerals
+  // draw n hour numerals
   fill(200);
   textFont(font, 30);
 
   textAlign(CENTER);
-  for (int hr = 0; hr < 12; hr++) {
-    float angle = radians(float(hr) * (360.0 / 12.0));
+  for (int hr = 0; hr < hoursOnClock; hr++) {
+    float angle = radians(float(hr) * (360.0 / hoursOnClock));
     float x = sin(angle) * numeralRadius;
     float y = -cos(angle) * numeralRadius;
 
-    //String numeral = str((12 + hr) % 13);
-    String numeral = str(hr % 12);
+    String numeral = str(hr % hoursOnClock);
     if (numeral.equals("0")) {
-      numeral = "12";
+      numeral = str(hoursOnClock);
     }
 
     push();
     translate(x, y);
-    //rotate(angle + radians(amountRot));
     rotate(angle);
     text(numeral, 0, 0);
     pop();
   }
 
-  // draw 11 hour numerals
+  // draw n-1 hour numerals
   textFont(font, 20);
   fill(200, 140, 140);
   textAlign(CENTER);
-  for (int hr = 0; hr < 11; hr++) {
-    float angle = radians(float(hr) * (360.0 / 11.0));
+  for (int hr = 0; hr < (hoursOnClock - 1); hr++) {
+    float angle = radians(float(hr) * (360.0 / (hoursOnClock - 1)));
     float x = sin(angle) * secondaryNumeralRadius;
     float y = -cos(angle) * secondaryNumeralRadius;
 
     //String numeral = str((12 + hr) % 13);
-    String numeral = str(hr % 11);
+    String numeral = str(hr % (hoursOnClock - 1));
     if (numeral.equals("0")) {
-      numeral = "11";
+      numeral = str(hoursOnClock - 1);
     }
 
     push();
