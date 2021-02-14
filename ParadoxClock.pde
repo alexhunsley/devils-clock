@@ -15,12 +15,20 @@ float clockDiameter;
 float numeralRadius;
 PFont font;
 
+int fps = 30;
+int drawSeconds = 0;
+int secsIncrement = 120;
+
+int ss = 0;
+int mm = 0;
+int hh = 0;
+
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
 
 void setup() {
   size(640, 640);
   stroke(255);
-  frameRate(1);
+  frameRate(fps);
   
   font = createFont("Arial",16,true); // STEP 2 Create Font
   
@@ -36,32 +44,27 @@ void setup() {
   cy = height / 2;
 }
 
+void updateDemoClock() {
+  ss = (ss + secsIncrement) % 60;
+  if (ss == 0) {
+    mm = (mm + 1) % 60;
+    if (mm == 0) {
+      hh = (hh + 1) % 24;
+      //if (hh == 0) {
+      //  hh = 1;
+      //}
+    }
+  }
+}
+
 void draw() {
   background(0);
 
-  float ss = second();
-  float mm = minute();
-  float hh = hour();
+  updateDemoClock();
+  //float ss = second();
+  //float mm = minute();
+  //float hh = hour();
   
-  // force 15
-  //hh = 16.5;
-  //mm = 30.0;
-  //ss = 0.0;
-
-  // force midnight
-  //hh = 0.0;
-  //mm = 0.0;
-  //ss = 0.0;
-
-  // force 12am
-  //hh = 12.0;
-  //mm = 0.0;
-  //ss = 0.0;
-
-// 11 hour clock first hour point
-  //hh = 1.0;
-  //mm = 5.0;
-  //ss = 45.0;
 
   float totalMinutes = hh * 60.0 + mm + ss / 60.0;
   
@@ -106,8 +109,11 @@ void draw() {
   
   // Draw the hands of the clock
   stroke(255);
-  strokeWeight(1);
-  line(0, 0, cos(s) * secondsRadius, sin(s) * secondsRadius);
+  
+  if (drawSeconds > 0) {
+    strokeWeight(1);
+    line(0, 0, cos(s) * secondsRadius, sin(s) * secondsRadius);
+  }
   strokeWeight(2);
   line(0, 0, cos(m) * minutesRadius, sin(m) * minutesRadius);
   strokeWeight(4);
