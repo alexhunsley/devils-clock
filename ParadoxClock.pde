@@ -13,11 +13,12 @@ float minutesRadius;
 float hoursRadius;
 float clockDiameter;
 float numeralRadius;
+float secondaryNumeralRadius;
 PFont font;
 
 int fps = 30;
 int drawSeconds = 0;
-int secsIncrement = 120;
+int secsIncrement = 10;
 
 int ss = 0;
 int mm = 0;
@@ -30,7 +31,7 @@ void setup() {
   stroke(255);
   frameRate(fps);
   
-  font = createFont("Arial",16,true); // STEP 2 Create Font
+  font = createFont("Arial", 16, true);
   
   int radius = min(width, height) / 2;
   secondsRadius = radius * 0.72;
@@ -39,6 +40,7 @@ void setup() {
   hoursRadius = radius * 0.50;
   clockDiameter = radius * 1.8;
   numeralRadius = radius * 0.785;
+  secondaryNumeralRadius = radius * 0.65;
   
   cx = width / 2;
   cy = height / 2;
@@ -80,11 +82,12 @@ void draw() {
   textAlign(LEFT);
 
   fill(200);
-  textFont(font, 30);
   // coord is left baseline of font
   
+  textFont(font, 30);
+
   String timeStr = nf((int)hh, 2) + ":" + nf((int)mm, 2) + ":" + nf((int)ss, 2);
-  text(timeStr, 10, 60);
+  text(timeStr, 20, 60);
 
   translate(cx, cy);
 
@@ -94,13 +97,13 @@ void draw() {
 
   float amountRot = -totalMinutes * 13.0 / 4.0;
 
-  print("Degrees amount is " + amountRot);
+  //print("Degrees amount is " + amountRot);
   
   // note the half_pi, due to 0 degrees being 3pm, not midday
   //rotate(radians(- 360.0 * 11.0 * percentageThroughDay ) - HALF_PI/2);
   rotate(radians(amountRot));
 
-  print(" %% is: " + percentageThroughDay + "\n");
+  //print(" %% is: " + percentageThroughDay + "\n");
   
   // Draw the clock background
   fill(40);
@@ -135,8 +138,10 @@ void draw() {
     endShape();
   }
 
-  // draw hour numerals
+  // draw 12 hour numerals
   fill(200);
+  textFont(font, 30);
+
   textAlign(CENTER);
   for (int hr = 0; hr < 12; hr++) {
     float angle = radians(float(hr) * (360.0 / 12.0));
@@ -151,10 +156,35 @@ void draw() {
 
     push();
     translate(x, y);
+    //rotate(angle + radians(amountRot));
     rotate(angle);
     text(numeral, 0, 0);
     pop();
   }
-  
+
+  // draw 11 hour numerals
+  textFont(font, 20);
+  fill(200, 140, 140);
+  textAlign(CENTER);
+  for (int hr = 0; hr < 11; hr++) {
+    float angle = radians(float(hr) * (360.0 / 11.0));
+    float x = sin(angle) * secondaryNumeralRadius;
+    float y = -cos(angle) * secondaryNumeralRadius;
+
+    //String numeral = str((12 + hr) % 13);
+    String numeral = str(hr % 11);
+    if (numeral.equals("0")) {
+      numeral = "11";
+    }
+
+    push();
+    translate(x, y);
+    rotate(angle);
+    text(numeral, 0, 0);
+    pop();
+  }
+
   pop(); // undo the push for entire clock rotation
+  
+  //saveFrame("######.tif");
 }
