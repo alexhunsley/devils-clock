@@ -20,6 +20,7 @@ PFont font;
 void setup() {
   size(640, 640);
   stroke(255);
+  frameRate(1);
   
   font = createFont("Arial",16,true); // STEP 2 Create Font
   
@@ -42,11 +43,35 @@ void draw() {
   float mm = minute();
   float hh = hour();
   
+  // force 15
+  //hh = 16.5;
+  //mm = 30.0;
+  //ss = 0.0;
+
+  // force midnight
+  //hh = 0.0;
+  //mm = 0.0;
+  //ss = 0.0;
+
+  // force 12am
+  //hh = 12.0;
+  //mm = 0.0;
+  //ss = 0.0;
+
+// 11 hour clock first hour point
+  //hh = 1.0;
+  //mm = 5.0;
+  //ss = 45.0;
+
+  float totalMinutes = hh * 60.0 + mm + ss / 60.0;
+  
+  float percentageThroughDay = hh / 24.0  +  mm / (60.0 * 24.0)  +  ss / (60.0 * 60.0 * 24.0);
+  
   // Angles for sin() and cos() start at 3 o'clock;
   // subtract HALF_PI to make them start at the top
   float s = map(ss, 0, 60, 0, TWO_PI) - HALF_PI;
-  float m = map(mm + norm(second(), 0, 60), 0, 60, 0, TWO_PI) - HALF_PI; 
-  float h = map(hh + norm(minute(), 0, 60), 0, 24, 0, TWO_PI * 2) - HALF_PI;
+  float m = map(mm + norm(ss, 0, 60), 0, 60, 0, TWO_PI) - HALF_PI; 
+  float h = map(hh + norm(mm, 0, 60), 0, 24, 0, TWO_PI * 2) - HALF_PI;
 
   // digital time
   textAlign(LEFT);
@@ -59,8 +84,21 @@ void draw() {
   text(timeStr, 10, 60);
 
   translate(cx, cy);
-  //rotate(radians(90));
 
+  push();
+
+  //float amountRot = 2 * -360.0 * 5.5 * percentageThroughDay;
+
+  float amountRot = -totalMinutes * 13.0 / 4.0;
+
+  print("Degrees amount is " + amountRot);
+  
+  // note the half_pi, due to 0 degrees being 3pm, not midday
+  //rotate(radians(- 360.0 * 11.0 * percentageThroughDay ) - HALF_PI/2);
+  rotate(radians(amountRot));
+
+  print(" %% is: " + percentageThroughDay + "\n");
+  
   // Draw the clock background
   fill(40);
   noStroke();
@@ -111,4 +149,6 @@ void draw() {
     text(numeral, 0, 0);
     pop();
   }
+  
+  pop(); // undo the push for entire clock rotation
 }
