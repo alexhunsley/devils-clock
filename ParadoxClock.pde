@@ -134,11 +134,13 @@ void draw() {
   float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
   //println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
   
+  hourMinDiff *= 3.0;
+  
   hourMinDiff = constrain(hourMinDiff, -HALF_PI, HALF_PI);
   
   textFont(font, 15);
   
-  float textBrightness = pow(cos(hourMinDiff), 10.0); 
+  float textBrightness = cos(hourMinDiff); 
   fill(map(textBrightness, 0.0, 1.0, faceBrightness, textMaxBrightness));
 
   //println("cos gives: " + textBrightness);
