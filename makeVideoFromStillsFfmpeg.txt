@@ -1,0 +1,3 @@
+From that site with how to make youtube compatible videos:
+
+ffmpeg -framerate 30  -i %06d.tif -codec:v libx264 -crf 21 -bf 2 -flags +cgop -pix_fmt yuv420p -codec:a aac -strict -2 -b:a 384k -r:a 48000 -movflags faststart paradoxClockDemo-4hourClock.mp4

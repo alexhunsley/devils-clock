@@ -20,11 +20,12 @@ int hoursOnClock = 12;
 int hoursInDay = 2 * hoursOnClock;
 
 int faceBrightness = 40;
+int faceDotsBrightness = 80;
 int textMaxBrightness = 100;
 
 int fps = 30;
 int drawSeconds = 0;
-int secsIncrement = 30;
+int secsIncrement = 10;
 
 float ss = 0;
 float mm = 0;
@@ -167,20 +168,61 @@ void draw() {
 
   // Draw the minute ticks
   strokeWeight(2);
+  stroke(faceDotsBrightness);
+  
+  float mult;
+  float multSlide;
+  float multPower = 0.7;
+  float multSlidePower = 0.5;
+  int numMultSteps = 3;
+  float useRadius;
+  
   for (int a = 0; a < 360; a+=6) {
-    beginShape();
     float angle = radians(a);
-    float x = sin(angle) * secondsRadius;
-    float y = -cos(angle) * secondsRadius;
-    vertex(x, y);
-    if (a % (360 / hoursOnClock) == 0) {
-      float x2 = sin(angle) * secondsRadiusB;
-      float y2 = -cos(angle) * secondsRadiusB;
-      vertex(x2, y2);
-    }
-    endShape();
-  }
 
+    mult = 1.0;
+    multSlide = 1.0;
+
+    useRadius = secondsRadius;
+    
+    for (int multSteps = 0; multSteps < numMultSteps; multSteps++) {
+      float angleOffset;
+      
+      if (multSteps == 0) {
+        stroke(255);
+        angleOffset = 0;
+      }
+      else {
+        stroke(faceDotsBrightness);
+        angleOffset = multSteps == 0 ? 0 : -percentageThroughDay * 10.0 / multSlide;  
+      }
+      
+      float cs = -cos(angle + angleOffset);
+      float sn = sin(angle + angleOffset);
+
+      float x = sn * useRadius;
+      float y = cs * useRadius;
+
+      beginShape();
+  
+      vertex(x, y);
+      if (multSteps == 0 && a % (360 / hoursOnClock) == 0) {
+        float x2 = sn * secondsRadiusB;
+        float y2 = cs * secondsRadiusB;
+        vertex(x2, y2);
+      }
+      endShape();
+      
+      mult *= multPower;
+      multSlide *= multSlidePower;
+      useRadius = secondsRadius * mult;
+      
+      //angleOffset += PI/30.0 / numMultSteps;
+    }
+    
+    //useRadius *= mult;
+  }
+  
   // draw n hour numerals
   fill(200);
   textFont(font, 30);
