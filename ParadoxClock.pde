@@ -31,7 +31,7 @@ float ss = 0;
 float mm = 0;
 float hh = 0;
 
-int demoMode = 1;
+int demoMode = 0;
 
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
 
@@ -126,47 +126,8 @@ void draw() {
   noStroke();
   ellipse(0, 0, clockDiameter, clockDiameter); 
   
-  // Draw the hands of the clock
-  stroke(255);
   
-  if (drawSeconds > 0) {
-    strokeWeight(1);
-    line(0, 0, sin(s) * secondsRadius, -cos(s) * secondsRadius);
-  }
-  
-  strokeWeight(2);
-  line(0, 0, sin(m) * minutesRadius, -cos(m) * minutesRadius);
-
-  float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
-  //println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
-  
-  hourMinDiff *= 3.0;
-  
-  hourMinDiff = constrain(hourMinDiff, -HALF_PI, HALF_PI);
-  
-  textFont(font, 15);
-  
-  float textBrightness = cos(hourMinDiff); 
-  fill(map(textBrightness, 0.0, 1.0, faceBrightness, textMaxBrightness));
-
-  //println("cos gives: " + textBrightness);
-  
-  push();
-  rotate(m - HALF_PI);
-  textAlign(LEFT);
-  text("d e v i l ' s", 15, -10);
-  pop();
-
-  strokeWeight(4);
-  line(0, 0, sin(h) * hoursRadius, -cos(h) * hoursRadius);
-  
-  push();
-  rotate(h - HALF_PI);
-  textAlign(LEFT);
-  text("c l o c k", 100, -10);
-  pop();
-
-  // Draw the minute ticks
+    // Draw the minute ticks
   strokeWeight(2);
   stroke(faceDotsBrightness);
   
@@ -222,6 +183,47 @@ void draw() {
     
     //useRadius *= mult;
   }
+  
+  
+  // Draw the hands of the clock
+  stroke(255);
+  
+  if (drawSeconds > 0) {
+    strokeWeight(1);
+    line(0, 0, sin(s) * secondsRadius, -cos(s) * secondsRadius);
+  }
+  
+  strokeWeight(2);
+  line(0, 0, sin(m) * minutesRadius, -cos(m) * minutesRadius);
+
+  float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
+  //println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
+  
+  hourMinDiff *= 3.0;
+  
+  hourMinDiff = constrain(hourMinDiff, -HALF_PI, HALF_PI);
+  
+  textFont(font, 15);
+  
+  float textBrightness = cos(hourMinDiff); 
+  fill(map(textBrightness, 0.0, 1.0, faceBrightness, textMaxBrightness));
+
+  //println("cos gives: " + textBrightness);
+  
+  push();
+  rotate(m - HALF_PI);
+  textAlign(LEFT);
+  text("d e v i l ' s", 15, -10);
+  pop();
+
+  strokeWeight(4);
+  line(0, 0, sin(h) * hoursRadius, -cos(h) * hoursRadius);
+  
+  push();
+  rotate(h - HALF_PI);
+  textAlign(LEFT);
+  text("c l o c k", 100, -10);
+  pop();
   
   // draw n hour numerals
   fill(200);
