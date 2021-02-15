@@ -26,16 +26,18 @@ int fps = 30;
 int drawSeconds = 0;
 int secsIncrement = 30;
 
-int ss = 0;
-int mm = 0;
-int hh = 0;
+float ss = 0;
+float mm = 0;
+float hh = 0;
+
+int demoMode = 1;
 
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
 
 void setup() {
   size(640, 640);
   stroke(255);
-  frameRate(fps);
+  frameRate(demoMode == 1 ? fps : 1);
   
   font = createFont("Arial", 16, true);
   
@@ -68,11 +70,14 @@ void updateDemoClock() {
 void draw() {
   background(0);
 
-  updateDemoClock();
-  //float ss = second();
-  //float mm = minute();
-  //float hh = hour();
-  
+  if (demoMode == 1) {
+    updateDemoClock();
+  }
+  else {
+    ss = second();
+    mm = minute();
+    hh = hour();
+  }
 
   //float totalMinutes = hh * 60.0 + mm + ss / 60.0;
   
@@ -82,9 +87,9 @@ void draw() {
   //println("PC: " + percentageThroughDay);
   // Angles for sin() and cos() start at 3 o'clock;
   // subtract HALF_PI to make them start at the top
-  float s = map(float(ss), 0, 60.0, 0.0, TWO_PI); // - HALF_PI;
-  float m = TWO_PI * (float(mm) + float(ss) / 60.0) / 60.0; // - HALF_PI;
-  float h = TWO_PI * (float(hh) + float(mm) / 60.0 + float(ss)/ 3600.0) / float(hoursOnClock); // - HALF_PI;
+  float s = map(ss, 0, 60.0, 0.0, TWO_PI); // - HALF_PI;
+  float m = TWO_PI * (mm + ss / 60.0) / 60.0; // - HALF_PI;
+  float h = TWO_PI * (hh + mm / 60.0 + ss / 3600.0) / float(hoursOnClock); // - HALF_PI;
 
   // digital time
   textAlign(LEFT);
