@@ -16,8 +16,11 @@ float numeralRadius;
 float secondaryNumeralRadius;
 PFont font;
 
-int hoursOnClock = 4;
+int hoursOnClock = 12;
 int hoursInDay = 2 * hoursOnClock;
+
+int faceBrightness = 40;
+int textMaxBrightness = 100;
 
 int fps = 30;
 int drawSeconds = 0;
@@ -79,9 +82,9 @@ void draw() {
   //println("PC: " + percentageThroughDay);
   // Angles for sin() and cos() start at 3 o'clock;
   // subtract HALF_PI to make them start at the top
-  float s = map(float(ss), 0, 60.0, 0.0, TWO_PI) - HALF_PI;
-  float m = TWO_PI * (float(mm) + float(ss) / 60.0) / 60.0 - HALF_PI;
-  float h = TWO_PI * (float(hh) + float(mm) / 60.0 + float(ss)/ 3600.0) / float(hoursOnClock) - HALF_PI;
+  float s = map(float(ss), 0, 60.0, 0.0, TWO_PI); // - HALF_PI;
+  float m = TWO_PI * (float(mm) + float(ss) / 60.0) / 60.0; // - HALF_PI;
+  float h = TWO_PI * (float(hh) + float(mm) / 60.0 + float(ss)/ 3600.0) / float(hoursOnClock); // - HALF_PI;
 
   // digital time
   textAlign(LEFT);
@@ -113,7 +116,7 @@ void draw() {
   //print(" %% is: " + percentageThroughDay + "\n");
   
   // Draw the clock background
-  fill(40);
+  fill(faceBrightness);
   noStroke();
   ellipse(0, 0, clockDiameter, clockDiameter); 
   
@@ -122,13 +125,39 @@ void draw() {
   
   if (drawSeconds > 0) {
     strokeWeight(1);
-    line(0, 0, cos(s) * secondsRadius, sin(s) * secondsRadius);
+    line(0, 0, sin(s) * secondsRadius, -cos(s) * secondsRadius);
   }
-  strokeWeight(2);
-  line(0, 0, cos(m) * minutesRadius, sin(m) * minutesRadius);
-  strokeWeight(4);
-  line(0, 0, cos(h) * hoursRadius, sin(h) * hoursRadius);
   
+  strokeWeight(2);
+  line(0, 0, sin(m) * minutesRadius, -cos(m) * minutesRadius);
+
+  float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
+  //println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
+  
+  hourMinDiff = constrain(hourMinDiff, -HALF_PI, HALF_PI);
+  
+  textFont(font, 15);
+  
+  float textBrightness = pow(cos(hourMinDiff), 10.0); 
+  fill(map(textBrightness, 0.0, 1.0, faceBrightness, textMaxBrightness));
+
+  //println("cos gives: " + textBrightness);
+  
+  push();
+  rotate(m - HALF_PI);
+  textAlign(LEFT);
+  text("d e v i l ' s", 15, -10);
+  pop();
+
+  strokeWeight(4);
+  line(0, 0, sin(h) * hoursRadius, -cos(h) * hoursRadius);
+  
+  push();
+  rotate(h - HALF_PI);
+  textAlign(LEFT);
+  text("c l o c k", 100, -10);
+  pop();
+
   // Draw the minute ticks
   strokeWeight(2);
   for (int a = 0; a < 360; a+=6) {
