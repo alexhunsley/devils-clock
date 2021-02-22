@@ -18,7 +18,7 @@ float numeralRadius;
 float secondaryNumeralRadius;
 PFont font;
 
-int hoursOnClock = 4;
+int hoursOnClock = 12;
 int hoursInDay = 2 * hoursOnClock;
 
 float timeDirectionFactor = -1.0;
