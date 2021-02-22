@@ -81,10 +81,10 @@ void setup() {
   
   G4P.setCursor(CROSS);
   //sdr = new GSlider(this, -cx + 20, cy - 50, 200, 40, 15);
-  sdr = new GSlider(this, 10, 10, 200, 40, 15);
+  //sdr = new GSlider(this, 10, 10, 200, 40, 15);
   
-  sdr.setNbrTicks(11);
-  sdr.setLimits(0, 0, 1);
+  //sdr.setNbrTicks(11);
+  //sdr.setLimits(0, 0, 1);
 }
 
 void updateDemoClock() {
