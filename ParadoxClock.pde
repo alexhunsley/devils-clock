@@ -35,6 +35,9 @@ float hh = 0;
 
 int demoMode = 1;
 
+float alpha = 0.0;
+float numRotationsPerDay = 22.0 * alpha + 2.0;
+
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
 
 void setup() {
@@ -78,7 +81,12 @@ void updateDemoClock() {
 }
 
 public void handleSliderEvents(GValueControl slider, GEvent event) {
-  println(sdr.getValueF());
+  println();
+  
+  alpha = sdr.getValueF();
+  numRotationsPerDay = 22.0 * alpha + 2.0;
+
+  println("alpha = " + alpha);
 }
 
 void draw() {
@@ -122,9 +130,11 @@ void draw() {
 
   //float amountRot = -totalMinutes * 13.0 / 4.0;
 
-  float totalTurnsNeeded = (hoursOnClock + 1);
   
-  float amountRot = -totalTurnsNeeded * 360.0 * percentageThroughDay;
+  //float totalTurnsNeeded = (hoursOnClock + 1);
+  //float amountRot = -totalTurnsNeeded * 360.0 * percentageThroughDay;
+
+  float amountRot = -numRotationsPerDay * 360.0 * percentageThroughDay;
   
   //print("Degrees amount is " + amountRot);
   
