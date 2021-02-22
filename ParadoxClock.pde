@@ -103,9 +103,9 @@ void draw() {
   String timeStr = nf((int)hh, 2) + ":" + nf((int)mm, 2) + ":" + nf((int)ss, 2);
   text(timeStr, 20, 60);
 
-  translate(cx, cy);
-
   push();
+
+  translate(cx, cy);
 
   //float amountRot = -totalMinutes * 13.0 / 4.0;
 
