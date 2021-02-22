@@ -1,3 +1,5 @@
+import g4p_controls.*;
+
 /**
  * Clock. 
  * 
@@ -5,7 +7,7 @@
  * and hour() functions. In this example, sin() and cos() values
  * are used to set the position of the hands.
  */
-
+GSlider sdr;
 int cx, cy;
 float secondsRadius;
 float secondsRadiusB;
@@ -31,7 +33,7 @@ float ss = 0;
 float mm = 0;
 float hh = 0;
 
-int demoMode = 0;
+int demoMode = 1;
 
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
 
@@ -53,6 +55,13 @@ void setup() {
   
   cx = width / 2;
   cy = height / 2;
+  
+  G4P.setCursor(CROSS);
+  //sdr = new GSlider(this, -cx + 20, cy - 50, 200, 40, 15);
+  sdr = new GSlider(this, 10, 10, 200, 40, 15);
+  
+  sdr.setNbrTicks(11);
+  sdr.setLimits(0, 0, 1);
 }
 
 void updateDemoClock() {
@@ -66,6 +75,10 @@ void updateDemoClock() {
       //}
     }
   }
+}
+
+public void handleSliderEvents(GValueControl slider, GEvent event) {
+  println(sdr.getValueF());
 }
 
 void draw() {
