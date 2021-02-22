@@ -290,27 +290,27 @@ void draw() {
     pop();
   }
 
-  // draw n-1 hour numerals
-  textFont(font, 20);
-  fill(200, 140, 140);
-  textAlign(CENTER);
-  for (int hr = 0; hr < (hoursOnClock - 1); hr++) {
-    float angle = timeDirectionFactor * radians(float(hr) * (360.0 / (hoursOnClock - 1)));
-    float x = sin(angle) * secondaryNumeralRadius;
-    float y = -cos(angle) * secondaryNumeralRadius;
+  //// draw n-1 hour numerals
+  //textFont(font, 20);
+  //fill(200, 140, 140);
+  //textAlign(CENTER);
+  //for (int hr = 0; hr < (hoursOnClock - 1); hr++) {
+  //  float angle = timeDirectionFactor * radians(float(hr) * (360.0 / (hoursOnClock - 1)));
+  //  float x = sin(angle) * secondaryNumeralRadius;
+  //  float y = -cos(angle) * secondaryNumeralRadius;
 
-    //String numeral = str((12 + hr) % 13);
-    String numeral = str(hr % (hoursOnClock - 1));
-    if (numeral.equals("0")) {
-      numeral = str(hoursOnClock - 1);
-    }
+  //  //String numeral = str((12 + hr) % 13);
+  //  String numeral = str(hr % (hoursOnClock - 1));
+  //  if (numeral.equals("0")) {
+  //    numeral = str(hoursOnClock - 1);
+  //  }
 
-    push();
-    translate(x, y);
-    rotate(angle);
-    text(numeral, 0, 0);
-    pop();
-  }
+  //  push();
+  //  translate(x, y);
+  //  rotate(angle);
+  //  text(numeral, 0, 0);
+  //  pop();
+  //}
 
   pop(); // undo the push for entire clock rotation
   
