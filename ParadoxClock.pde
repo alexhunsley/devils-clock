@@ -178,7 +178,7 @@ void draw() {
   float multSlide;
   float multPower = 0.7;
   float multSlidePower = 0.5;
-  int numMultSteps = 3;
+  int numMultSteps = 1;  //use 3 for the dots!
   float useRadius;
   
   for (int a = 0; a < 360; a+=6) {
