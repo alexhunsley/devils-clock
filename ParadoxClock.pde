@@ -21,6 +21,8 @@ PFont font;
 int hoursOnClock = 12;
 int hoursInDay = 2 * hoursOnClock;
 
+float timeDirectionFactor = -1.0;
+
 int faceBrightness = 40;
 int faceDotsBrightness = 80;
 int textMaxBrightness = 100;
@@ -35,7 +37,25 @@ float hh = 0;
 
 int demoMode = 1;
 
-float alpha = 0.0;
+// hades' timepiece
+//float alpha = 12.0/11.0;
+
+// Alpha parameter for clock.
+// Popular with our customers:
+//
+// normal clock:       -1/11
+// prioritise hours:   0
+// devil's clock:      0.5
+// prioritise minutes: 1
+// hades' timepiece:   12/11
+//
+// (recommend CCW time dir for the 
+// best hades' timepiece effect!)
+
+
+//float alpha = -1.0/11.0;
+float alpha = 12.0/11.0;
+
 float numRotationsPerDay = 22.0 * alpha + 2.0;
 
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
@@ -134,7 +154,7 @@ void draw() {
   //float totalTurnsNeeded = (hoursOnClock + 1);
   //float amountRot = -totalTurnsNeeded * 360.0 * percentageThroughDay;
 
-  float amountRot = -numRotationsPerDay * 360.0 * percentageThroughDay;
+  float amountRot = timeDirectionFactor * (-numRotationsPerDay * 360.0 * percentageThroughDay);
   
   //print("Degrees amount is " + amountRot);
   
@@ -181,8 +201,8 @@ void draw() {
         angleOffset = multSteps == 0 ? 0 : -percentageThroughDay * 10.0 / multSlide;  
       }
       
-      float cs = -cos(angle + angleOffset);
-      float sn = sin(angle + angleOffset);
+      float cs = -cos(timeDirectionFactor*(angle + angleOffset));
+      float sn = sin(timeDirectionFactor*(angle + angleOffset));
 
       float x = sn * useRadius;
       float y = cs * useRadius;
@@ -213,11 +233,11 @@ void draw() {
   
   if (drawSeconds > 0) {
     strokeWeight(1);
-    line(0, 0, sin(s) * secondsRadius, -cos(s) * secondsRadius);
+    line(0, 0, sin(timeDirectionFactor * s) * secondsRadius, -cos(timeDirectionFactor * s) * secondsRadius);
   }
   
   strokeWeight(2);
-  line(0, 0, sin(m) * minutesRadius, -cos(m) * minutesRadius);
+  line(0, 0, sin(timeDirectionFactor * m) * minutesRadius, -cos(timeDirectionFactor * m) * minutesRadius);
 
   float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
   //println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
@@ -234,16 +254,16 @@ void draw() {
   //println("cos gives: " + textBrightness);
   
   push();
-  rotate(m - HALF_PI);
+  rotate(timeDirectionFactor * m - HALF_PI);
   textAlign(LEFT);
   text("d e v i l ' s", 15, -10);
   pop();
 
   strokeWeight(4);
-  line(0, 0, sin(h) * hoursRadius, -cos(h) * hoursRadius);
+  line(0, 0, sin(timeDirectionFactor * h) * hoursRadius, -cos(timeDirectionFactor * h) * hoursRadius);
   
   push();
-  rotate(h - HALF_PI);
+  rotate(timeDirectionFactor * h - HALF_PI);
   textAlign(LEFT);
   text("c l o c k", 100, -10);
   pop();
@@ -254,7 +274,7 @@ void draw() {
 
   textAlign(CENTER);
   for (int hr = 0; hr < hoursOnClock; hr++) {
-    float angle = radians(float(hr) * (360.0 / hoursOnClock));
+    float angle = timeDirectionFactor * radians(float(hr) * (360.0 / hoursOnClock));
     float x = sin(angle) * numeralRadius;
     float y = -cos(angle) * numeralRadius;
 
@@ -275,7 +295,7 @@ void draw() {
   fill(200, 140, 140);
   textAlign(CENTER);
   for (int hr = 0; hr < (hoursOnClock - 1); hr++) {
-    float angle = radians(float(hr) * (360.0 / (hoursOnClock - 1)));
+    float angle = timeDirectionFactor * radians(float(hr) * (360.0 / (hoursOnClock - 1)));
     float x = sin(angle) * secondaryNumeralRadius;
     float y = -cos(angle) * secondaryNumeralRadius;
 
