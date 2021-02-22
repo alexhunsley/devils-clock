@@ -18,7 +18,7 @@ float numeralRadius;
 float secondaryNumeralRadius;
 PFont font;
 
-int hoursOnClock = 12;
+int hoursOnClock = 4;
 int hoursInDay = 2 * hoursOnClock;
 
 float timeDirectionFactor = -1.0;
@@ -56,7 +56,7 @@ int demoMode = 1;
 //float alpha = -1.0/11.0;
 float alpha = 12.0/11.0;
 
-float numRotationsPerDay = 22.0 * alpha + 2.0;
+float numRotationsPerDay = (hoursInDay - 2) * alpha + 2.0;
 
 // pradox clock: entire thing must rotate 5.5 whole turns CC every half day! ( = 1980 degrees)
 
