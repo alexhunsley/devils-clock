@@ -239,34 +239,36 @@ void draw() {
   strokeWeight(2);
   line(0, 0, sin(timeDirectionFactor * m) * minutesRadius, -cos(timeDirectionFactor * m) * minutesRadius);
 
-  float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
-  //println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
+// draw the 'devils' text on hands -- visible when they are close
+  //float hourMinDiff = constrain((h % TWO_PI - m  % TWO_PI) % TWO_PI, - HALF_PI, HALF_PI);
+  ////println("diff clamp % PI: " + hourMinDiff + "  h: " + h + " m: " + m);
   
-  hourMinDiff *= 3.0;
+  //hourMinDiff *= 3.0;
   
-  hourMinDiff = constrain(hourMinDiff, -HALF_PI, HALF_PI);
+  //hourMinDiff = constrain(hourMinDiff, -HALF_PI, HALF_PI);
   
-  textFont(font, 15);
+  //textFont(font, 15);
   
-  float textBrightness = cos(hourMinDiff); 
-  fill(map(textBrightness, 0.0, 1.0, faceBrightness, textMaxBrightness));
+  //float textBrightness = cos(hourMinDiff); 
+  //fill(map(textBrightness, 0.0, 1.0, faceBrightness, textMaxBrightness));
 
-  //println("cos gives: " + textBrightness);
+  ////println("cos gives: " + textBrightness);
   
-  push();
-  rotate(timeDirectionFactor * m - HALF_PI);
-  textAlign(LEFT);
-  text("d e v i l ' s", 15, -10);
-  pop();
+  //push();
+  //rotate(timeDirectionFactor * m - HALF_PI);
+  //textAlign(LEFT);
+  //text("d e v i l ' s", 15, -10);
+  //pop();
 
   strokeWeight(4);
   line(0, 0, sin(timeDirectionFactor * h) * hoursRadius, -cos(timeDirectionFactor * h) * hoursRadius);
   
-  push();
-  rotate(timeDirectionFactor * h - HALF_PI);
-  textAlign(LEFT);
-  text("c l o c k", 100, -10);
-  pop();
+// draw the 'clock' text on hands -- visible when they are close
+  //push();
+  //rotate(timeDirectionFactor * h - HALF_PI);
+  //textAlign(LEFT);
+  //text("c l o c k", 100, -10);
+  //pop();
   
   // draw n hour numerals
   fill(200);
