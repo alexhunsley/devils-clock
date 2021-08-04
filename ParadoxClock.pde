@@ -27,7 +27,7 @@ int faceBrightness = 40;
 int faceDotsBrightness = 80;
 int textMaxBrightness = 100;
 
-int fps = 30;
+int fps = 15;
 int drawSeconds = 0;
 int secsIncrement = 10;
 
@@ -316,5 +316,5 @@ void draw() {
 
   pop(); // undo the push for entire clock rotation
   
-  //saveFrame("######.tif");
+  saveFrame("######.tif");
 }
